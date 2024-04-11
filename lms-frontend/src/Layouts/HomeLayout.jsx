@@ -1,10 +1,29 @@
 import { FiMenu } from "react-icons/fi";
 import { AiFillCloseCircle } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import {useDispatch,useSelector} from "react-redux";
 import Footer from "../Components/Footer";
 
 function HomeLayout({children}) {
-  function changeWidth() {
+   
+   const dispatch = useDispatch();
+   const navigate= useNavigate();
+
+   //for chacking if user is logged in 
+   const isLoggedIn = useSelector((state)=>state?.auth?.isLoggedIn);
+    
+
+   const role = useSelector((state)=>state?.auth?.role);
+
+   function handleLogout(){
+      e.preventDefault();
+      //const res= await dispatch(logout());
+      navigate('/');
+   }
+ 
+ 
+ 
+   function changeWidth() {
     const drawerSide = document.getElementsByClassName("drawer-side");
     drawerSide[0].style.width = 'auto';
   }
@@ -39,6 +58,11 @@ function HomeLayout({children}) {
             <li>
               <Link to="/">Home</Link>
             </li>
+             {isLoggedIn && role ==='ADMIN'&&
+                <li>
+                  <Link to='/admin/dashboard' >Admin Dashboard</Link>
+                </li>
+             }
             <li>
               <Link to="/courses"> All Courses</Link>
             </li>
@@ -48,6 +72,38 @@ function HomeLayout({children}) {
             <li>
               <Link to="/about"> About Us</Link>
             </li>
+               {
+                  !isLoggedIn && (
+                     
+                     <div className="w-full flex ">
+                        <button className="btn-primary mx-2 px-2 py-2 font-semibold rounded-md w-1/2  bg-red-500 hover:bg-red-600 ">
+                           <Link to="/login">Login</Link>
+                        </button>
+                        <button className="btn-secondary mx-2  px-2 py-2 font-semibold rounded-md w-1/2 bg-red-500  hover:bg-red-600">
+                           <Link to="/login">Signup</Link>
+                        </button>
+                     </div>
+                     
+                  )
+
+               }
+               {
+                  isLoggedIn && (
+                     
+                     <div className="w-full flex ">
+                        <button className="btn-primary mx-2 px-2 py-2 font-semibold rounded-md w-1/2  bg-red-500 hover:bg-red-600 ">
+                           <Link to="/user/profile">Profile</Link>
+                        </button>
+                        <button className="btn-secondary mx-2  px-2 py-2 font-semibold rounded-md w-1/2 bg-red-500  hover:bg-red-600">
+                           <Link onClick={handleLogout}>Logout</Link>
+                        </button>
+                     </div>
+                     
+                  )
+
+               }
+               
+
           </ul>
         </div>
       </div>
