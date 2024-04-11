@@ -2,10 +2,11 @@ import './App.css'
 
 
 // components imports
- 
+import HomeLayout from './Layouts/HomeLayout'
+import HomePage from './Pages/HomePage' 
 
-import { Routes } from 'react-router-dom'
-import Footer from './Components/Footer'
+import { Route, Routes } from 'react-router-dom'
+ 
 
 
 function App() {
@@ -13,11 +14,12 @@ function App() {
 
   return (
     < >
-         {/* <Routes>
+         <Routes>
+             <Route path="/" element={<HomePage/>}></Route>
 
-         </Routes> */}
-         <Footer/>
-
+         </Routes>
+         
+       
     </>
   )
 }
