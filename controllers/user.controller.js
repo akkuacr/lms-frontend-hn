@@ -1,6 +1,7 @@
 import User from "../models/ user.model.js";
 import AppError from "../utils/error.utils.js";
-
+import cloudinary from 'cloudinary';
+import fs from 'fs/promises';
 const cookieOptions = {
   maxAge: 7 * 24 * 60 * 60 * 1000,
   httpOnly: true,
@@ -10,10 +11,11 @@ const cookieOptions = {
 const register = async (req, res, next) => {
   //console.log("yha aya");
   const { fullName, email, password } = req.body;
-  //console.log(req.body);
+  console.log(req.body);
 
   if (!fullName || !email || !password) {
-    return next(new AppError("All Fields are required", 400));
+    console.log(password);
+    return next(new AppError("All fields are not necessary", 400));
   }
 
   const userExists = await User.findOne({ email });
@@ -37,6 +39,37 @@ const register = async (req, res, next) => {
   }
 
   //TODO :file upload
+  //  console.log(req.file); 
+
+   if(req.file){
+    console.log(req.file);
+    try{
+       const result  = await cloudinary.v2.uploader.upload(req.file.path,{
+            folder:'lms',
+            width:250,
+            height:250,
+            gravity: 'faces',
+            crop:'fill'
+
+       });
+
+       console.log(result);
+
+       if(result){
+        user.avatar.public_id= result.public_id;
+        user.avatar.secure_url = result.secure_url;
+       }
+
+       // remove file from server
+      fs.rm(`uploads/${req.file.filename}`)
+
+
+    }catch(e){
+      return next(new AppError("File upload usnsuccessful", 500));
+    }
+   }
+
+
   await user.save();
   user.password = undefined;
 
@@ -66,7 +99,7 @@ const login = async (req, res) => {
       email,
     }).select("+password");
 
-    if (!user || !user.comparePassword(password)) {
+    if (!(user && (await user.comparePassword(password)))) {
       return next(new AppError("Email or password doesnot match"));
     }
 
@@ -81,7 +114,7 @@ const login = async (req, res) => {
       user,
     });
   } catch (e) {
-    return next(new AppError(e.message, 500));
+     return next(new AppError(e.message,500));
   }
 };
 
