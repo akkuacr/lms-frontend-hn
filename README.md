@@ -1,4 +1,7 @@
-## lab-mongodb-nodejs
-Instructions: To install dependencies - npm install To run the code in live reload mode, use command - npm run dev To run the app - npm start
+# For running the server on local host
+# First install dependencies
+npm install bcryptjs cloudinary cookie-parser cors dotenv express jsonwebtoken mongoose multer nodemailer nodemon --save
+# nodemon is for showing live changes
 
-Note: If you are running an application on a port XXXX, copy the url from the bar and attach the url with port https://your-url.pwskills.app:XXXX to see the output.
+npm install morgan
+<!-- morgan is basically for logs it prints log in console -->
