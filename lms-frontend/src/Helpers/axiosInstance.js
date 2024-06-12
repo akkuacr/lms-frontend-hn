@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL="https://white-plumber-nvxjm.pwskills.app:5001/api/v1";
+const BASE_URL="https://white-plumber-nvxjm.pwskills.app:5000/api/v1";
 const axiosInstance = axios.create();
 
 axiosInstance.defaults.baseURL = BASE_URL;
